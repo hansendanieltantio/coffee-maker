@@ -1,0 +1,37 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('orders', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->string('user_name');
+            $table->string('menu_name');
+            $table->integer('weight'); // Digunakan untuk pembagi di rumus WFQ
+            
+            // Kolom durasi pompa yang AKTIF digunakan (versi singkat)
+            $table->integer('p_kopi')->default(0);
+            $table->integer('p_gula')->default(0);
+            $table->integer('p_susu')->default(0);
+            $table->integer('p_air')->default(0);
+
+            // Status pemesanan
+            $table->string('status')->default('pending'); 
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('orders');
+    }
+};
